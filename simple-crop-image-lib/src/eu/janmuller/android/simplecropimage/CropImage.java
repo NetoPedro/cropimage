@@ -128,10 +128,9 @@ public class CropImage extends MonitoredActivity {
                 mAspectY = 1;
             }
 
-            mImagePath = extras.getString(IMAGE_PATH);
+            mBitmap = extras.getString(BITMAP);
 
-            mSaveUri = getImageUri(mImagePath);
-            mBitmap = getBitmap(mImagePath);
+        
 
             if (extras.containsKey(ASPECT_X) && extras.get(ASPECT_X) instanceof Integer) {
 
@@ -393,21 +392,13 @@ public class CropImage extends MonitoredActivity {
         Bundle myExtras = getIntent().getExtras();
         if (myExtras != null && (myExtras.getParcelable("data") != null
                 || myExtras.getBoolean(RETURN_DATA))) {
-
+                
             Bundle extras = new Bundle();
             extras.putParcelable(RETURN_DATA_AS_BITMAP, croppedImage);
             setResult(RESULT_OK,
                     (new Intent()).setAction(ACTION_INLINE_DATA).putExtras(extras));
             finish();
         } else {
-            final Bitmap b = croppedImage;
-            Util.startBackgroundJob(this, null, getString(R.string.saving_image),
-                    new Runnable() {
-                        public void run() {
-
-                            saveOutput(b);
-                        }
-                    }, mHandler);
         }
     }
 
